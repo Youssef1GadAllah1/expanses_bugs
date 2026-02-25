@@ -1,3 +1,4 @@
+import 'package:expenses_app/widgets/expanses.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:expenses_app/Models/expanses.dart';
@@ -62,8 +63,11 @@ class _NewExpansesState extends State<NewExpanses> {
                     IconButton(
                       onPressed: () async {
                         final now = DateTime.now();
-                        final firstDate =
-                            DateTime(now.year - 1, now.month, now.day);
+                        final firstDate = DateTime(
+                          now.year - 1,
+                          now.month,
+                          now.day,
+                        );
 
                         final pickdata = await showDatePicker(
                           context: context,
@@ -73,6 +77,9 @@ class _NewExpansesState extends State<NewExpanses> {
                         );
 
                         // 🐞 BUG 1: نسينا setState
+                        setState(() {
+                          _selectedDate = pickdata;
+                        });
                         _selectedDate = pickdata;
                       },
                       icon: const Icon(Icons.calendar_month),
@@ -106,12 +113,13 @@ class _NewExpansesState extends State<NewExpanses> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  final double? enteredAmount =
-                      double.tryParse(_amountcontroller.text);
+                  final double? enteredAmount = double.tryParse(
+                    _amountcontroller.text,
+                  );
 
                   // 🐞 BUG 2: شرط معكوس
                   final bool amountisvalid =
-                      enteredAmount != null && enteredAmount > 0;
+                      enteredAmount != null && enteredAmount < 0;
 
                   if (_titlecontroller.text.trim().isEmpty ||
                       amountisvalid ||
@@ -129,13 +137,10 @@ class _NewExpansesState extends State<NewExpanses> {
                   );
 
                   // 🐞 BUG 3: بدل ما يقفل بيروح يفتح صفحة تانية
-                  Navigator.push(
+                  Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                      builder: (ctx) => const Scaffold(
-                        body: Center(child: Text("Wrong Navigation 😅")),
-                      ),
-                    ),
+                    MaterialPageRoute(builder: (ctx) => Expanses()),
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: const Text('Save Expanses'),

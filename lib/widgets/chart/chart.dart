@@ -6,19 +6,18 @@ class Chart extends StatelessWidget {
   const Chart({super.key, required this.expenses});
   final List<Expansesmodel> expenses;
   List<ExpansesBucket> get buckets {
-  return [
-    ExpansesBucket.forCategory(expenses, Category.food),
-    ExpansesBucket.forCategory(expenses, Category.leisure),
-    ExpansesBucket.forCategory(expenses, Category.travel),
-    ExpansesBucket.forCategory(expenses, Category.work),
-  ];
-}
-
+    return [
+      ExpansesBucket.forCategory(expenses, Category.food),
+      ExpansesBucket.forCategory(expenses, Category.leisure),
+      ExpansesBucket.forCategory(expenses, Category.travel),
+      ExpansesBucket.forCategory(expenses, Category.work),
+    ];
+  }
 
   get maxTotalAmount {
     double max = 0;
     for (final bucket in buckets) {
-      if (bucket.totalAmount > max) {
+      if (bucket.totalAmount < max) {
         max = bucket.totalAmount;
       }
     }
@@ -32,17 +31,17 @@ class Chart extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       width: double.infinity,
       height: 200,
-       decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(20),
-    gradient: LinearGradient(
-      colors: [
-        Theme.of(context).colorScheme.primary.withOpacity(0.2),
-        Theme.of(context).colorScheme.primary.withOpacity(0.05),
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
-  ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            Theme.of(context).colorScheme.primary.withOpacity(0.05),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
       child: Column(
         children: [
           Expanded(
@@ -53,7 +52,7 @@ class Chart extends StatelessWidget {
                   ChartBar(
                     fill: bucket.totalAmount == 0
                         ? 0
-                        :maxTotalAmount / bucket.totalAmount,
+                        : maxTotalAmount / bucket.totalAmount,
                   ),
               ],
             ),
@@ -65,8 +64,9 @@ class Chart extends StatelessWidget {
                   (bucket) => Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Icon(categoryicon[bucket.category],
-                      color: Theme.of(context).colorScheme.primary,
+                      child: Icon(
+                        categoryicon[bucket.category],
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                   ),

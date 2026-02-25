@@ -67,16 +67,18 @@ class _ExpansesState extends State<Expanses> {
         ],
       ),
       body: Center(
-        child: Column(
-          children: [
-            Chart(expenses: _registeredExpanses),
-            Expanded(
-              child: ExpansesList(
-                expanses: _registeredExpanses,
-                onRemoveExpanses: _removeExpanses,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Chart(expenses: _registeredExpanses),
+              Expanded(
+                child: ExpansesList(
+                  expanses: _registeredExpanses,
+                  onRemoveExpanses: _removeExpanses,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
